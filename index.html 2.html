@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduMama Nigeria — Your Homeschooling Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --sun:    #FFB800;
+      --sun2:   #FF8C00;
+      --green:  #2ECC71;
+      --green2: #27AE60;
+      --blue:   #3B82F6;
+      --blue2:  #1D4ED8;
+      --pink:   #F472B6;
+      --pink2:  #EC4899;
+      --purple: #8B5CF6;
+      --red:    #EF4444;
+      --bg:     #FFFBF0;
+      --bg2:    #FFF8E7;
+      --ink:    #1A1A2E;
+      --ink2:   #2D2D44;
+      --muted:  #6B7280;
+      --white:  #FFFFFF;
+      --border: rgba(26,26,46,0.1);
+      --shadow: 0 8px 32px rgba(26,26,46,0.1);
+      --card-r: 20px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── FLOATING BLOBS ── */
+    .blob-wrap {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+    }
+    .b1 { width:500px;height:500px;background:var(--sun);top:-100px;left:-100px;animation:bdrift 14s ease-in-out infinite; }
+    .b2 { width:400px;height:400px;background:var(--green);top:40%;right:-100px;animation:bdrift 18s ease-in-out infinite reverse; }
+    .b3 { width:350px;height:350px;background:var(--blue);bottom:-100px;left:30%;animation:bdrift 12s ease-in-out infinite 3s; }
+    .b4 { width:250px;height:250px;background:var(--pink);top:60%;left:10%;animation:bdrift 16s ease-in-out infinite 6s; }
+    @keyframes bdrift {
+      0%,100%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(30px,-40px) scale(1.05)}
+      66%{transform:translate(-20px,30px) scale(0.95)}
+    }
+
+    /* ── MARQUEE ── */
+    .marquee {
+      background: var(--ink);
+      padding: .65rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .mtrack {
+      display: inline-flex;
+      animation: mroll 22s linear infinite;
+    }
+    .mitem {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0 2rem;
+      color: rgba(255,255,255,.5);
+    }
+    .mitem span { color: var(--sun); }
+    @keyframes mroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 4rem;
+      background: rgba(255,251,240,.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 2px solid rgba(255,184,0,.25);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: .75rem;
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--sun), var(--sun2));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 12px rgba(255,184,0,.4);
+    }
+    .nav-brand-name {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      letter-spacing: .5px;
+    }
+    .nav-brand-name em { color: var(--green2); font-style: normal; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .88rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .85rem;
+      padding: .65rem 1.6rem;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: #fff;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all .3s;
+      box-shadow: 0 4px 14px rgba(46,204,113,.4);
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46,204,113,.5); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 5rem;
+      overflow: hidden;
+    }
+    .hero-content { max-width: 750px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: rgba(255,184,0,.15);
+      border: 2px solid rgba(255,184,0,.4);
+      border-radius: 50px;
+      padding: .4rem 1rem;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: popIn .7s .2s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    .hero-badge span {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--sun2);
+    }
+    .badge-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(.6);opacity:.5} }
+
+    .hero-title {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: clamp(3rem, 7.5vw, 6.5rem);
+      line-height: 1.05;
+      letter-spacing: .5px;
+      color: var(--ink);
+      opacity: 0;
+      animation: slideUp .9s .4s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .hero-title .t-green { color: var(--green2); }
+    .hero-title .t-sun { color: var(--sun2); }
+    .hero-title .t-blue { color: var(--blue); }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 550px;
+      font-weight: 500;
+      opacity: 0;
+      animation: slideUp .9s .6s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .hero-sub strong { color: var(--ink); }
+
+    .hero-langs {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      margin-top: 1.8rem;
+      opacity: 0;
+      animation: slideUp .9s .75s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .lang-chip {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .78rem;
+      padding: .4rem 1rem;
+      border-radius: 50px;
+      border: 2px solid var(--border);
+      color: var(--ink2);
+      background: var(--white);
+      transition: all .3s;
+    }
+    .lang-chip:hover { transform: translateY(-2px); }
+    .lc-en { border-color: var(--blue); color: var(--blue); }
+    .lc-ha { border-color: var(--green); color: var(--green2); }
+    .lc-yo { border-color: var(--purple); color: var(--purple); }
+    .lc-ig { border-color: var(--red); color: var(--red); }
+    .lc-pi { border-color: var(--sun2); color: var(--sun2); }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: slideUp .9s .9s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .btn-main {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .95rem;
+      padding: .9rem 2.2rem;
+      background: linear-gradient(135deg, var(--sun), var(--sun2));
+      color: #fff;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all .3s;
+      box-shadow: 0 6px 20px rgba(255,184,0,.4);
+      display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255,184,0,.5); }
+    .btn-sec {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .95rem;
+      padding: .9rem 2.2rem;
+      background: transparent;
+      color: var(--ink);
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid var(--border);
+      transition: all .3s;
+      display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-sec:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+
+    /* Hero floating cards */
+    .hero-floats {
+      position: absolute;
+      right: 3rem; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 1.2rem;
+      opacity: 0;
+      animation: slideLeft .9s 1.1s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .float-card {
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 1.3rem 1.6rem;
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(255,255,255,.8);
+      min-width: 220px;
+      transition: transform .3s;
+    }
+    .float-card:hover { transform: translateX(-6px) rotate(-1deg); }
+    .fc-top { display: flex; align-items: center; gap: .7rem; margin-bottom: .5rem; }
+    .fc-icon { font-size: 1.5rem; }
+    .fc-label {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: .82rem;
+      color: var(--ink);
+    }
+    .fc-sub {
+      font-size: .75rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .fc-pill {
+      display: inline-block;
+      margin-top: .5rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .65rem;
+      padding: .25rem .7rem;
+      border-radius: 50px;
+    }
+    .pill-green { background: rgba(46,204,113,.15); color: var(--green2); }
+    .pill-blue  { background: rgba(59,130,246,.15); color: var(--blue2); }
+    .pill-sun   { background: rgba(255,184,0,.15); color: var(--sun2); }
+    .pill-pink  { background: rgba(244,114,182,.15); color: var(--pink2); }
+
+    @keyframes slideUp   { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:none} }
+    @keyframes slideLeft { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:none} }
+    @keyframes popIn     { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1)} }
+
+    /* ── STATS ── */
+    .stats-bar {
+      position: relative; z-index: 1;
+      background: var(--ink);
+      padding: 2.5rem 4rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 2.5rem;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    .stat-num em { font-style: normal; }
+    .stat-num.c1 em { color: var(--sun); }
+    .stat-num.c2 em { color: var(--green); }
+    .stat-num.c3 em { color: var(--blue); }
+    .stat-num.c4 em { color: var(--pink); }
+    .stat-label {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      margin-top: .3rem;
+    }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+    .sw { padding: 7rem 4rem; max-width: 1300px; margin: 0 auto; }
+
+    .section-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+    .sb-green { background: rgba(46,204,113,.15); color: var(--green2); }
+    .sb-blue  { background: rgba(59,130,246,.15); color: var(--blue2); }
+    .sb-sun   { background: rgba(255,184,0,.15); color: var(--sun2); }
+    .sb-pink  { background: rgba(244,114,182,.15); color: var(--pink2); }
+    .sb-purple{ background: rgba(139,92,246,.15); color: var(--purple); }
+
+    .sec-title {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
+      line-height: 1.1;
+      letter-spacing: .5px;
+      color: var(--ink);
+    }
+    .sec-sub {
+      margin-top: 1rem;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 560px;
+      font-weight: 500;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg2); border-top: 2px dashed rgba(255,184,0,.3); border-bottom: 2px dashed rgba(255,184,0,.3); }
+
+    .features-header { text-align: center; margin-bottom: 4rem; }
+    .features-header .sec-sub { margin: 1rem auto 0; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .feat-card {
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 2.2rem;
+      border: 2px solid transparent;
+      transition: all .35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: var(--card-r) var(--card-r) 0 0;
+    }
+    .fc-sun::before    { background: linear-gradient(90deg, var(--sun), var(--sun2)); }
+    .fc-green::before  { background: linear-gradient(90deg, var(--green), var(--green2)); }
+    .fc-blue::before   { background: linear-gradient(90deg, var(--blue), var(--blue2)); }
+    .fc-pink::before   { background: linear-gradient(90deg, var(--pink), var(--pink2)); }
+    .fc-purple::before { background: linear-gradient(90deg, var(--purple), #6D28D9); }
+    .fc-red::before    { background: linear-gradient(90deg, var(--red), #B91C1C); }
+
+    .feat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(26,26,46,.12); border-color: var(--border); }
+    .feat-icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.4rem;
+    }
+    .fw-sun    { background: rgba(255,184,0,.15); }
+    .fw-green  { background: rgba(46,204,113,.15); }
+    .fw-blue   { background: rgba(59,130,246,.15); }
+    .fw-pink   { background: rgba(244,114,182,.15); }
+    .fw-purple { background: rgba(139,92,246,.15); }
+    .fw-red    { background: rgba(239,68,68,.15); }
+
+    .feat-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: .6rem;
+    }
+    .feat-desc {
+      font-size: .9rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .feat-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .ftag {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .65rem;
+      padding: .25rem .65rem;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg); }
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .how-steps { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2.5rem; }
+    .how-step {
+      display: flex;
+      gap: 1.3rem;
+      align-items: flex-start;
+      padding: 1.5rem;
+      background: var(--white);
+      border-radius: var(--card-r);
+      border: 2px solid var(--border);
+      transition: all .3s;
+    }
+    .how-step:hover { border-color: var(--green); box-shadow: 0 8px 24px rgba(46,204,113,.12); }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: #fff;
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: .95rem; color: var(--ink); margin-bottom: .3rem; }
+    .step-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+    .how-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .hv-card {
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      border: 2px solid var(--border);
+      transition: transform .3s;
+    }
+    .hv-card:hover { transform: rotate(-2deg) scale(1.03); }
+    .hv-card:nth-child(2) { margin-top: 2rem; }
+    .hv-card:nth-child(4) { margin-top: -2rem; }
+    .hv-big {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+    .hv-big.c-sun    { color: var(--sun2); }
+    .hv-big.c-green  { color: var(--green2); }
+    .hv-big.c-blue   { color: var(--blue); }
+    .hv-big.c-purple { color: var(--purple); }
+    .hv-label { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .78rem; color: var(--muted); margin-top: .3rem; }
+    .hv-bar { height: 6px; border-radius: 50px; margin-top: .8rem; background: var(--bg2); overflow: hidden; }
+    .hv-fill { height: 100%; border-radius: 50px; }
+    .hf-sun    { background: linear-gradient(90deg, var(--sun), var(--sun2)); width: 85%; }
+    .hf-green  { background: linear-gradient(90deg, var(--green), var(--green2)); width: 92%; }
+    .hf-blue   { background: linear-gradient(90deg, var(--blue), var(--blue2)); width: 78%; }
+    .hf-purple { background: linear-gradient(90deg, var(--purple), #6D28D9); width: 88%; }
+
+    /* ── CHAT DEMO ── */
+    #demo { background: var(--ink); overflow: hidden; }
+    .demo-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .demo-left .sec-title { color: var(--white); }
+    .demo-left .sec-sub { color: rgba(255,255,255,.5); }
+    .demo-left .section-badge { background: rgba(255,184,0,.15); color: var(--sun); }
+
+    .chat-window {
+      background: rgba(255,255,255,.05);
+      border: 2px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .chat-topbar {
+      background: rgba(255,255,255,.08);
+      padding: 1rem 1.5rem;
+      display: flex; align-items: center; gap: .75rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .chat-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--sun), var(--sun2));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .chat-name { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: .9rem; color: #fff; }
+    .chat-status { font-size: .72rem; color: var(--green); font-weight: 600; }
+    .chat-dots { margin-left: auto; display: flex; gap: .4rem; }
+    .chat-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.3); }
+
+    .chat-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; max-height: 380px; overflow: hidden; }
+    .msg {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-end;
+    }
+    .msg-bubble {
+      max-width: 80%;
+      padding: .85rem 1.1rem;
+      border-radius: 18px;
+      font-size: .85rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .msg.user { flex-direction: row-reverse; }
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, var(--sun), var(--sun2));
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.bot .msg-bubble {
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      border-bottom-left-radius: 4px;
+    }
+    .msg-av {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; flex-shrink: 0;
+    }
+    .av-user { background: linear-gradient(135deg, var(--blue), var(--blue2)); }
+    .av-bot  { background: linear-gradient(135deg, var(--sun), var(--sun2)); }
+
+    .chat-input {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; gap: .7rem; align-items: center;
+    }
+    .chat-input input {
+      flex: 1;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50px;
+      padding: .7rem 1.2rem;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem;
+      outline: none;
+    }
+    .chat-input input::placeholder { color: rgba(255,255,255,.3); }
+    .chat-send {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--sun), var(--sun2));
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .3s;
+    }
+    .chat-send:hover { transform: scale(1.1); }
+
+    /* ── USE CASES ── */
+    #usecases { background: var(--bg2); }
+    .uc-header { text-align: center; margin-bottom: 4rem; }
+    .uc-header .sec-sub { margin: 1rem auto 0; }
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .uc-card {
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 2rem;
+      border: 2px solid var(--border);
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .uc-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      transform: scaleX(0);
+      transition: transform .3s;
+    }
+    .uc1::after { background: linear-gradient(90deg, var(--green), var(--blue)); }
+    .uc2::after { background: linear-gradient(90deg, var(--sun), var(--pink)); }
+    .uc3::after { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+    .uc4::after { background: linear-gradient(90deg, var(--red), var(--sun)); }
+    .uc-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .uc-card:hover::after { transform: scaleX(1); }
+    .uc-q {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: .78rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+    .uc-title {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin-bottom: .8rem;
+      line-height: 1.3;
+    }
+    .uc-desc { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+    .uc-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    /* ── CURRICULUM ── */
+    #curriculum { background: var(--bg); }
+    .curr-header { text-align: center; margin-bottom: 4rem; }
+    .curr-header .sec-sub { margin: 1rem auto 0; }
+    .curr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .curr-card {
+      border-radius: var(--card-r);
+      padding: 2.2rem;
+      border: 2px solid transparent;
+      transition: all .35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cc-nursery { background: linear-gradient(135deg, #FFF9E6, #FFF0CC); border-color: rgba(255,184,0,.3); }
+    .cc-primary { background: linear-gradient(135deg, #E6FFF3, #CCFFE8); border-color: rgba(46,204,113,.3); }
+    .cc-secondary { background: linear-gradient(135deg, #E6F0FF, #CCE0FF); border-color: rgba(59,130,246,.3); }
+    .curr-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+    .curr-level {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: .4rem;
+    }
+    .cl-nursery  { color: var(--sun2); }
+    .cl-primary  { color: var(--green2); }
+    .cl-secondary{ color: var(--blue2); }
+    .curr-age {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .curr-subjects {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+    }
+    .cs {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .75rem;
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      background: rgba(255,255,255,.7);
+      color: var(--ink2);
+      border: 1.5px solid var(--border);
+    }
+    .curr-cta {
+      margin-top: 1.8rem;
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .82rem;
+      color: var(--ink);
+      text-decoration: none;
+      transition: gap .3s;
+    }
+    .curr-cta:hover { gap: .8rem; }
+
+    /* ── COMMUNITY ── */
+    #community { background: var(--ink); }
+    .community-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .community-left .sec-title { color: #fff; }
+    .community-left .sec-sub { color: rgba(255,255,255,.5); }
+    .community-left .section-badge { background: rgba(244,114,182,.15); color: var(--pink); }
+
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .8rem;
+      margin-top: 2.5rem;
+    }
+    .state-card {
+      background: rgba(255,255,255,.06);
+      border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      padding: 1.1rem 1.3rem;
+      display: flex; align-items: center; gap: .8rem;
+      transition: all .3s;
+      cursor: pointer;
+    }
+    .state-card:hover {
+      background: rgba(255,255,255,.1);
+      border-color: var(--green);
+      transform: translateY(-2px);
+    }
+    .sc-icon { font-size: 1.4rem; }
+    .sc-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .88rem; color: #fff; }
+    .sc-count { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .7rem; color: var(--green); }
+
+    .comm-quotes { display: flex; flex-direction: column; gap: 1.2rem; }
+    .quote-card {
+      background: rgba(255,255,255,.05);
+      border: 1.5px solid rgba(255,255,255,.08);
+      border-radius: var(--card-r);
+      padding: 1.6rem;
+      transition: all .3s;
+    }
+    .quote-card:hover { background: rgba(255,255,255,.09); border-color: rgba(255,184,0,.3); }
+    .quote-text { font-size: .9rem; line-height: 1.65; color: rgba(255,255,255,.75); font-style: italic; font-weight: 500; }
+    .quote-author {
+      display: flex; align-items: center; gap: .75rem;
+      margin-top: 1rem;
+    }
+    .qa-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .qa-name { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: .82rem; color: #fff; }
+    .qa-loc  { font-size: .72rem; color: rgba(255,255,255,.4); }
+    .stars { color: var(--sun); font-size: .75rem; margin-left: auto; }
+
+    /* ── RESOURCES ── */
+    #resources { background: var(--bg2); }
+    .res-header { text-align: center; margin-bottom: 4rem; }
+    .res-header .sec-sub { margin: 1rem auto 0; }
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+    .res-card {
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 1.8rem 1.5rem;
+      border: 2px solid var(--border);
+      text-align: center;
+      transition: all .35s;
+    }
+    .res-card:hover { transform: translateY(-6px) rotate(1deg); box-shadow: var(--shadow); border-color: var(--sun); }
+    .res-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+    .res-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: .95rem; color: var(--ink); margin-bottom: .5rem; }
+    .res-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+    .res-free {
+      display: inline-block;
+      margin-top: .8rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .65rem;
+      padding: .25rem .7rem;
+      border-radius: 50px;
+      background: rgba(46,204,113,.15);
+      color: var(--green2);
+    }
+
+    /* ── CTA ── */
+    #cta {
+      background: linear-gradient(135deg, var(--sun) 0%, var(--sun2) 40%, var(--pink2) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .cta-inner {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 7rem 4rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .cta-title {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: .5px;
+      margin-bottom: 1.2rem;
+    }
+    .cta-sub { font-size: 1.05rem; color: rgba(255,255,255,.85); line-height: 1.7; margin-bottom: 2.5rem; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .95rem;
+      padding: .9rem 2.2rem;
+      background: #fff;
+      color: var(--sun2);
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid #fff;
+      transition: all .3s;
+      display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-white:hover { background: transparent; color: #fff; }
+    .btn-ghost-w {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: .95rem;
+      padding: .9rem 2.2rem;
+      background: transparent;
+      color: #fff;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,.6);
+      transition: all .3s;
+    }
+    .btn-ghost-w:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+    .cta-emojis { font-size: 2rem; margin-bottom: 1.5rem; letter-spacing: .3rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink2);
+      padding: 4rem 4rem 2rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .footer-brand { }
+    .fb-name {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: .8rem;
+    }
+    .fb-name em { color: var(--green); font-style: normal; }
+    .fb-desc { font-size: .85rem; color: rgba(255,255,255,.45); line-height: 1.7; max-width: 260px; }
+    .fb-langs {
+      display: flex; gap: .4rem; flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+    .fb-lang {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .65rem;
+      padding: .2rem .6rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.5);
+    }
+    .footer-col h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: .85rem;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      letter-spacing: .5px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .footer-col a {
+      font-size: .82rem;
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      transition: color .3s;
+      font-weight: 500;
+    }
+    .footer-col a:hover { color: var(--sun); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 2rem;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .fb-copy { font-size: .78rem; color: rgba(255,255,255,.25); font-family: 'Nunito', sans-serif; font-weight: 700; }
+    .fb-heart { color: var(--pink); }
+    .footer-socials { display: flex; gap: 1rem; }
+    .fs-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: all .3s;
+      text-decoration: none;
+    }
+    .fs-icon:hover { background: var(--sun); border-color: var(--sun); transform: translateY(-2px); }
+
+
+    /* ── FOREIGN LANGUAGES SECTION ── */
+    #foreign-langs { background: var(--bg); border-top: 2px dashed rgba(59,130,246,.25); border-bottom: 2px dashed rgba(59,130,246,.25); }
+    .fl-header { text-align: center; margin-bottom: 4rem; }
+    .fl-header .sec-sub { margin: 1rem auto 0; }
+    .fl-big-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .fl-card { background: var(--white); border-radius: var(--card-r); border: 2px solid var(--border); overflow: hidden; transition: all .35s; }
+    .fl-card:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(26,26,46,.13); }
+    .fl-card-top { padding: 1.8rem 1.8rem 1.2rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .fl-flag { font-size: 2.8rem; line-height: 1; flex-shrink: 0; }
+    .fl-lang-name { font-family: "Fredoka One",sans-serif; font-size: 1.35rem; letter-spacing: .5px; color: var(--ink); margin-bottom: .2rem; }
+    .fl-native { font-family: "Nunito",sans-serif; font-weight: 700; font-size: .78rem; color: var(--muted); }
+    .fl-pill { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; padding: .22rem .65rem; border-radius: 50px; margin-top: .4rem; display: inline-block; }
+    .fl-card-body { padding: 0 1.8rem 1.8rem; }
+    .fl-desc { font-size: .87rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+    .fl-features { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.2rem; }
+    .fl-feat-tag { font-family: "Nunito",sans-serif; font-weight: 700; font-size: .65rem; padding: .25rem .65rem; border-radius: 50px; border: 1.5px solid var(--border); color: var(--muted); }
+    .fl-sample { background: var(--bg2); border-radius: 12px; padding: 1rem 1.2rem; border-left: 3px solid; }
+    .fl-sample-label { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+    .fl-sample-text { font-size: .88rem; font-weight: 600; color: var(--ink); }
+    .fl-sample-trans { font-size: .78rem; color: var(--muted); margin-top: .2rem; font-style: italic; }
+    .fll-french { border-color: rgba(0,85,164,.25); } .fll-french .fl-lang-name { color: #003f9e; } .fll-french .fl-pill { background: rgba(0,85,164,.12); color: #003f9e; } .fll-french .fl-sample { border-color: #003f9e; } .fll-french:hover { border-color: #003f9e; }
+    .fll-arabic { border-color: rgba(34,139,34,.25); } .fll-arabic .fl-lang-name { color: #1a6e1a; } .fll-arabic .fl-pill { background: rgba(34,139,34,.12); color: #1a6e1a; } .fll-arabic .fl-sample { border-color: #1a6e1a; } .fll-arabic:hover { border-color: #1a6e1a; }
+    .fll-mandarin { border-color: rgba(220,20,60,.25); } .fll-mandarin .fl-lang-name { color: #c0001a; } .fll-mandarin .fl-pill { background: rgba(220,20,60,.12); color: #c0001a; } .fll-mandarin .fl-sample { border-color: #c0001a; } .fll-mandarin:hover { border-color: #c0001a; }
+    .fll-spanish { border-color: rgba(198,12,48,.25); } .fll-spanish .fl-lang-name { color: #c60c30; } .fll-spanish .fl-pill { background: rgba(198,12,48,.12); color: #c60c30; } .fll-spanish .fl-sample { border-color: #c60c30; } .fll-spanish:hover { border-color: #c60c30; }
+    .fll-german { border-color: rgba(50,50,50,.25); } .fll-german .fl-lang-name { color: #1a1a1a; } .fll-german .fl-pill { background: rgba(50,50,50,.10); color: #1a1a1a; } .fll-german .fl-sample { border-color: #333; } .fll-german:hover { border-color: #333; }
+    .fll-portuguese { border-color: rgba(0,102,0,.25); } .fll-portuguese .fl-lang-name { color: #006600; } .fll-portuguese .fl-pill { background: rgba(0,102,0,.12); color: #006600; } .fll-portuguese .fl-sample { border-color: #006600; } .fll-portuguese:hover { border-color: #006600; }
+    .all-langs-strip { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; padding: 2.5rem 4rem; background: var(--ink2); position: relative; z-index: 1; }
+    .als-chip { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .8rem; padding: .5rem 1.2rem; border-radius: 50px; border: 2px solid rgba(255,255,255,.12); color: rgba(255,255,255,.6); transition: all .3s; cursor: default; }
+    .als-chip:hover { border-color: var(--sun); color: var(--sun); transform: translateY(-2px); }
+    .als-chip.native { border-color: rgba(46,204,113,.4); color: var(--green); }
+    .als-chip.foreign { border-color: rgba(59,130,246,.3); color: rgba(180,210,255,.8); }
+
+    /* ── FIND A MAMA ── */
+    #find-mama { background: var(--bg2); border-top: 2px dashed rgba(244,114,182,.35); }
+    .fm-header { text-align: center; margin-bottom: 3.5rem; }
+    .fm-header .sec-sub { margin: 1rem auto 0; }
+    .fm-search-bar { background: var(--white); border: 2px solid var(--border); border-radius: 20px; padding: 1.8rem 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 3rem; box-shadow: var(--shadow); }
+    .fm-search-bar input, .fm-search-bar select { flex: 1; min-width: 150px; padding: .75rem 1.1rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: "DM Sans",sans-serif; font-size: .9rem; color: var(--ink); background: var(--bg); outline: none; transition: border-color .3s; }
+    .fm-search-bar input:focus, .fm-search-bar select:focus { border-color: var(--pink2); }
+    .fm-search-btn { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .88rem; padding: .75rem 1.8rem; background: linear-gradient(135deg,var(--pink),var(--pink2)); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: all .3s; box-shadow: 0 4px 14px rgba(236,72,153,.35); white-space: nowrap; }
+    .fm-search-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(236,72,153,.45); }
+    .fm-results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.4rem; margin-bottom: 3rem; }
+    .mama-card { background: var(--white); border-radius: var(--card-r); border: 2px solid var(--border); overflow: hidden; transition: all .35s; }
+    .mama-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(26,26,46,.12); border-color: var(--pink); }
+    .mama-card-top { padding: 1.5rem 1.5rem 0; display: flex; align-items: flex-start; gap: 1rem; }
+    .mama-avatar { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+    .mama-name { font-family: "Nunito",sans-serif; font-weight: 900; font-size: 1rem; color: var(--ink); }
+    .mama-location { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+    .mama-verified { display: inline-flex; align-items: center; gap: .3rem; font-family: "Nunito",sans-serif; font-weight: 700; font-size: .62rem; background: rgba(46,204,113,.12); color: var(--green2); padding: .18rem .55rem; border-radius: 50px; margin-top: .35rem; }
+    .mama-card-body { padding: 1rem 1.5rem; }
+    .mama-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
+    .mama-tag { font-family: "Nunito",sans-serif; font-weight: 700; font-size: .65rem; padding: .22rem .65rem; border-radius: 50px; border: 1.5px solid var(--border); color: var(--muted); }
+    .mama-bio { font-size: .82rem; color: var(--muted); line-height: 1.55; margin-bottom: 1rem; }
+    .mama-stats { display: flex; gap: 1rem; padding: .9rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .ms-item { text-align: center; flex: 1; }
+    .ms-num { font-family: "Fredoka One",sans-serif; font-size: 1.2rem; color: var(--ink); }
+    .ms-label { font-size: .65rem; color: var(--muted); font-family: "Nunito",sans-serif; font-weight: 700; }
+    .mama-actions { display: flex; gap: .6rem; }
+    .ma-btn { flex: 1; font-family: "Nunito",sans-serif; font-weight: 800; font-size: .75rem; padding: .6rem .8rem; border-radius: 10px; border: none; cursor: pointer; transition: all .3s; display: flex; align-items: center; justify-content: center; gap: .35rem; text-decoration: none; }
+    .ma-primary { background: linear-gradient(135deg,var(--pink),var(--pink2)); color: #fff; }
+    .ma-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(236,72,153,.35); }
+    .ma-secondary { background: var(--bg2); color: var(--ink2); border: 1.5px solid var(--border); }
+    .ma-secondary:hover { border-color: var(--green); color: var(--green2); }
+    .ma-wa { background: #25D366; color: #fff; }
+    .ma-wa:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,211,102,.35); }
+    .mama-modal-overlay { position: fixed; inset: 0; background: rgba(26,26,46,.6); backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .mama-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .mama-modal { background: var(--white); border-radius: 24px; max-width: 500px; width: 100%; padding: 2.5rem; position: relative; transform: scale(.95); transition: transform .3s; max-height: 88vh; overflow-y: auto; }
+    .mama-modal-overlay.open .mama-modal { transform: scale(1); }
+    .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; width: 32px; height: 32px; background: var(--bg2); border: none; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .3s; }
+    .modal-close:hover { background: var(--border); }
+    .modal-avatar { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin-bottom: 1rem; }
+    .modal-name { font-family: "Fredoka One",sans-serif; font-size: 1.8rem; color: var(--ink); margin-bottom: .2rem; }
+    .modal-loc { font-size: .9rem; color: var(--muted); margin-bottom: 1rem; }
+    .modal-section-title { font-family: "Nunito",sans-serif; font-weight: 900; font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin: 1.3rem 0 .6rem; }
+    .modal-contacts { display: flex; flex-direction: column; gap: .7rem; }
+    .modal-contact-row { display: flex; align-items: center; gap: .9rem; padding: .8rem 1rem; background: var(--bg2); border-radius: 12px; text-decoration: none; color: var(--ink); transition: all .3s; border: 1.5px solid transparent; }
+    .modal-contact-row:hover { border-color: var(--pink); background: rgba(244,114,182,.07); }
+    .mcr-icon { font-size: 1.3rem; }
+    .mcr-label { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .88rem; color: var(--ink); }
+    .mcr-val { font-size: .78rem; color: var(--muted); }
+    .mcr-arr { margin-left: auto; color: var(--muted); }
+    .fm-register { background: linear-gradient(135deg,var(--pink) 0%,var(--purple) 100%); border-radius: 24px; padding: 3rem; text-align: center; position: relative; overflow: hidden; margin-top: 1rem; }
+    .fm-register::before { content: ""; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='3' fill='white' fill-opacity='0.06'/%3E%3C/svg%3E"); }
+    .fm-register h3 { font-family: "Fredoka One",sans-serif; font-size: 1.8rem; color: #fff; position: relative; z-index: 1; margin-bottom: .7rem; }
+    .fm-register p { font-size: .95rem; color: rgba(255,255,255,.8); line-height: 1.65; max-width: 440px; margin: 0 auto 2rem; position: relative; z-index: 1; }
+    .fm-form { display: flex; gap: .7rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
+    .fm-form input, .fm-form select { padding: .8rem 1.2rem; border-radius: 12px; border: 2px solid rgba(255,255,255,.3); background: rgba(255,255,255,.15); color: #fff; font-family: "DM Sans",sans-serif; font-size: .88rem; outline: none; min-width: 170px; transition: border-color .3s; }
+    .fm-form input::placeholder { color: rgba(255,255,255,.6); }
+    .fm-form select option { color: var(--ink); background: #fff; }
+    .fm-form input:focus, .fm-form select:focus { border-color: rgba(255,255,255,.7); }
+    .fm-form-btn { font-family: "Nunito",sans-serif; font-weight: 800; font-size: .9rem; padding: .8rem 2rem; background: #fff; color: var(--pink2); border: none; border-radius: 12px; cursor: pointer; transition: all .3s; }
+    .fm-form-btn:hover { background: var(--bg2); transform: translateY(-2px); }
+
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .curr-grid { grid-template-columns: 1fr 1fr; }
+      .res-grid { grid-template-columns: repeat(2, 1fr); }
+      .fl-big-grid { grid-template-columns: 1fr 1fr; }
+      .fm-results-grid { grid-template-columns: 1fr 1fr; }
+      .hero-floats { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: .9rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 7rem 1.5rem 4rem; }
+      .sw { padding: 5rem 1.5rem; }
+      .how-grid, .demo-inner, .community-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .features-grid, .curr-grid, .uc-grid, .res-grid, .fl-big-grid, .fm-results-grid { grid-template-columns: 1fr; }
+      .stats-bar { padding: 2rem 1.5rem; }
+      footer { padding: 3rem 1.5rem 2rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BLOBS -->
+<div class="blob-wrap">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mtrack">
+    <span class="mitem"><span>📚</span> Curriculum Planning</span>
+    <span class="mitem"><span>🌍</span> Nigerian Standards</span>
+    <span class="mitem"><span>🗣️</span> Hausa · Yoruba · Igbo · Pidgin</span>
+    <span class="mitem"><span>👩‍👧‍👦</span> Multi-Child Learning</span>
+    <span class="mitem"><span>✏️</span> Lesson Plans</span>
+    <span class="mitem"><span>🏡</span> Home-Based Education</span>
+    <span class="mitem"><span>🇳🇬</span> EduMama Nigeria</span>
+    <span class="mitem"><span>📚</span> Curriculum Planning</span>
+    <span class="mitem"><span>🌍</span> Nigerian Standards</span>
+    <span class="mitem"><span>🗣️</span> Hausa · Yoruba · Igbo · Pidgin</span>
+    <span class="mitem"><span>👩‍👧‍👦</span> Multi-Child Learning</span>
+    <span class="mitem"><span>✏️</span> Lesson Plans</span>
+    <span class="mitem"><span>🏡</span> Home-Based Education</span>
+    <span class="mitem"><span>🇳🇬</span> EduMama Nigeria</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <div class="nav-icon">📚</div>
+    <span class="nav-brand-name">EduMama <em>Nigeria</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#curriculum">Curriculum</a></li>
+    <li><a href="#demo">AI Assistant</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#foreign-langs">Languages</a></li>
+    <li><a href="#find-mama">Find a Mama</a></li>
+    <li><a href="#resources">Resources</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Started Free 🚀</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span>🇳🇬 Built for Nigerian Homeschool Mums</span>
+    </div>
+    <h1 class="hero-title">
+      Your <span class="t-green">Homeschool</span><br/>
+      <span class="t-sun">Journey</span> Starts<br/>
+      <span class="t-blue">Here</span> 🎉
+    </h1>
+    <p class="hero-sub">
+      <strong>EduMama Nigeria</strong> is your smart, supportive companion for homeschooling — with lesson plans, cultural context, regional language support, and a whole community of amazing mamas just like you.
+    </p>
+    <div class="hero-langs">
+      <span class="lang-chip lc-en">🇬🇧 English</span>
+      <span class="lang-chip lc-ha">🟢 Hausa</span>
+      <span class="lang-chip lc-yo">🔵 Yoruba</span>
+      <span class="lang-chip lc-ig">🔴 Igbo</span>
+      <span class="lang-chip lc-pi">🟠 Pidgin</span>
+      <span class="lang-chip" style="border-color:#003f9e;color:#003f9e;">🇫🇷 Français</span>
+      <span class="lang-chip" style="border-color:#c60c30;color:#c60c30;">🇪🇸 Español</span>
+      <span class="lang-chip" style="border-color:#1a6e1a;color:#1a6e1a;">🇸🇦 Arabic</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-main">🚀 Start Free Today</a>
+      <a href="#demo" class="btn-sec">💬 See AI in Action</a>
+    </div>
+  </div>
+
+  <div class="hero-floats">
+    <div class="float-card">
+      <div class="fc-top">
+        <span class="fc-icon">📝</span>
+        <span class="fc-label">Lesson Plan Ready!</span>
+      </div>
+      <div class="fc-sub">Week 3 Science Plan for Amara, Age 7 (Primary 2, Enugu)</div>
+      <span class="fc-pill pill-green">✓ Generated</span>
+    </div>
+    <div class="float-card">
+      <div class="fc-top">
+        <span class="fc-icon">🗣️</span>
+        <span class="fc-label">Hausa Reading Set</span>
+      </div>
+      <div class="fc-sub">5 stories for age 5 with phonics — downloaded 240x this week</div>
+      <span class="fc-pill pill-blue">📥 Free Download</span>
+    </div>
+    <div class="float-card">
+      <div class="fc-top">
+        <span class="fc-icon">👩‍👧‍👦</span>
+        <span class="fc-label">Lagos Mamas Group</span>
+      </div>
+      <div class="fc-sub">1,240 members · 3 events this month</div>
+      <span class="fc-pill pill-pink">🔴 Live Now</span>
+    </div>
+    <div class="float-card">
+      <div class="fc-top">
+        <span class="fc-icon">🎯</span>
+        <span class="fc-label">Progress Tracker</span>
+      </div>
+      <div class="fc-sub">Taiwo: Maths 92% · English 88% · Science 79%</div>
+      <span class="fc-pill pill-sun">↑ +12% this month</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat reveal">
+    <div class="stat-num c1">15,000<em>+</em></div>
+    <div class="stat-label">Homeschool Mums</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num c2">36<em> States</em></div>
+    <div class="stat-label">Across Nigeria</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num c3">500<em>+</em></div>
+    <div class="stat-label">Free Resources</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num c4">5<em> Languages</em></div>
+    <div class="stat-label">Supported</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="sw">
+    <div class="features-header reveal">
+      <span class="section-badge sb-sun">✨ Everything You Need</span>
+      <h2 class="sec-title">Your Complete<br/>Homeschool Toolkit</h2>
+      <p class="sec-sub">From daily schedules to Nigerian language resources — EduMama has every tool a homeschooling mama needs, all in one place.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card fc-sun reveal">
+        <div class="feat-icon-wrap fw-sun">📖</div>
+        <div class="feat-title">Curriculum Guidance</div>
+        <div class="feat-desc">Age-appropriate lesson plans for Nursery, Primary, and Secondary levels, aligned with Nigerian FGN curricula and enriched with global best practices.</div>
+        <div class="feat-tags">
+          <span class="ftag">FGN Aligned</span>
+          <span class="ftag">All Levels</span>
+          <span class="ftag">Free Resources</span>
+        </div>
+      </div>
+      <div class="feat-card fc-green reveal">
+        <div class="feat-icon-wrap fw-green">🗣️</div>
+        <div class="feat-title">Regional & Cultural Fit</div>
+        <div class="feat-desc">Materials and examples in Hausa, Yoruba, Igbo, and Pidgin. Culturally relevant stories, proverbs, and activities that reflect your child's world.</div>
+        <div class="feat-tags">
+          <span class="ftag">Hausa</span>
+          <span class="ftag">Yoruba</span>
+          <span class="ftag">Igbo</span>
+          <span class="ftag">Pidgin</span>
+        </div>
+      </div>
+      <div class="feat-card fc-blue reveal">
+        <div class="feat-icon-wrap fw-blue">🗓️</div>
+        <div class="feat-title">Daily Scheduling Tools</div>
+        <div class="feat-desc">Weekly templates, time-blocking guides, and tips for balancing homeschooling with household responsibilities — built for the real Nigerian home.</div>
+        <div class="feat-tags">
+          <span class="ftag">Templates</span>
+          <span class="ftag">Reminders</span>
+          <span class="ftag">Multi-Child</span>
+        </div>
+      </div>
+      <div class="feat-card fc-pink reveal">
+        <div class="feat-icon-wrap fw-pink">📊</div>
+        <div class="feat-title">Assessment & Tracking</div>
+        <div class="feat-desc">Auto-generated quizzes, mini-tests, and progress reports tailored to Nigerian curricula — track your child's growth without formal exam pressure.</div>
+        <div class="feat-tags">
+          <span class="ftag">Auto Quizzes</span>
+          <span class="ftag">Progress Reports</span>
+          <span class="ftag">Custom Tests</span>
+        </div>
+      </div>
+      <div class="feat-card fc-purple reveal">
+        <div class="feat-icon-wrap fw-purple">👩‍👧‍👦</div>
+        <div class="feat-title">Community & Networking</div>
+        <div class="feat-desc">Connect with homeschooling groups in your state or city, share experiences, find mentors, and attend local meetups and virtual events.</div>
+        <div class="feat-tags">
+          <span class="ftag">State Groups</span>
+          <span class="ftag">Events</span>
+          <span class="ftag">Mentorship</span>
+        </div>
+      </div>
+      <div class="feat-card fc-red reveal">
+        <div class="feat-icon-wrap fw-red">💆‍♀️</div>
+        <div class="feat-title">Mum Wellbeing Support</div>
+        <div class="feat-desc">Stress management tips, positive reinforcement techniques, screen time guidance, and encouraging words — because you matter too, mama!</div>
+        <div class="feat-tags">
+          <span class="ftag">Self-Care</span>
+          <span class="ftag">Motivation</span>
+          <span class="ftag">Screen Time</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="sw">
+    <div class="how-grid">
+      <div>
+        <div class="reveal">
+          <span class="section-badge sb-green">⚡ How It Works</span>
+          <h2 class="sec-title">Up and Running<br/>in 3 Easy Steps</h2>
+          <p class="sec-sub">No tech experience needed. EduMama is designed to be as easy as chatting with a friend who happens to know everything about homeschooling in Nigeria.</p>
+        </div>
+        <div class="how-steps">
+          <div class="how-step reveal">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-title">Set Up Your Profile</div>
+              <div class="step-desc">Tell us your state, your child's age/grade, and preferred teaching language. Takes under 2 minutes!</div>
+            </div>
+          </div>
+          <div class="how-step reveal">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-title">Ask Your AI Assistant</div>
+              <div class="step-desc">Ask anything — lesson plans, quiz ideas, community connections, or just "How do I teach fractions to two kids at once?"</div>
+            </div>
+          </div>
+          <div class="how-step reveal">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-title">Teach, Track & Thrive</div>
+              <div class="step-desc">Use your materials, track progress, connect with other mums, and watch your children flourish — all in one dashboard.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-visual reveal">
+        <div class="hv-card">
+          <div class="hv-big c-sun">85%</div>
+          <div class="hv-label">Curriculum Complete</div>
+          <div class="hv-bar"><div class="hv-fill hf-sun"></div></div>
+        </div>
+        <div class="hv-card">
+          <div class="hv-big c-green">Primary 3</div>
+          <div class="hv-label">Taiwo's Grade Level</div>
+          <div class="hv-bar"><div class="hv-fill hf-green"></div></div>
+        </div>
+        <div class="hv-card">
+          <div class="hv-big c-blue">14</div>
+          <div class="hv-label">Lessons This Week</div>
+          <div class="hv-bar"><div class="hv-fill hf-blue"></div></div>
+        </div>
+        <div class="hv-card">
+          <div class="hv-big c-purple">⭐ A+</div>
+          <div class="hv-label">Last Assessment Score</div>
+          <div class="hv-bar"><div class="hv-fill hf-purple"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI DEMO -->
+<section id="demo">
+  <div class="sw">
+    <div class="demo-inner">
+      <div class="demo-left reveal">
+        <span class="section-badge">🤖 AI Assistant</span>
+        <h2 class="sec-title">Ask EduMama<br/>Anything</h2>
+        <p class="sec-sub">Your AI assistant understands Nigerian culture, local resources, and the everyday reality of homeschooling in Nigeria. It's like having a brilliant homeschool mama friend on call 24/7.</p>
+        <div class="hero-actions" style="margin-top:2rem;">
+          <a href="#cta" class="btn-main">Try It Free 🚀</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="chat-window">
+          <div class="chat-topbar">
+            <div class="chat-avatar">📚</div>
+            <div>
+              <div class="chat-name">EduMama AI</div>
+              <div class="chat-status">● Online — Always ready to help!</div>
+            </div>
+            <div class="chat-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="chat-body">
+            <div class="msg user">
+              <div class="msg-av av-user">👩</div>
+              <div class="msg-bubble">I'm homeschooling my 7-year-old in Enugu. Can you give me a 1-week science plan using items I can find at home? 🏡</div>
+            </div>
+            <div class="msg bot">
+              <div class="msg-av av-bot">📚</div>
+              <div class="msg-bubble">Great question, mama! Here's your 5-day home science plan for Primary 2 (Enugu):<br/><br/>📅 <strong>Mon:</strong> Properties of Water — use a bowl, cup & salt from your kitchen.<br/>📅 <strong>Tue:</strong> Floating & Sinking — coins, paper, and orange peel!<br/>📅 <strong>Wed:</strong> Plants Need Sunlight — place a plant by window & away from it.<br/>📅 <strong>Thu:</strong> Air Has Weight — balloon experiment (two balloons, a ruler).<br/>📅 <strong>Fri:</strong> Soil Types — collect soil from your compound for comparison.<br/><br/>All aligned to Primary 2 Basic Science (FGN Curriculum). Want worksheets? 📝</div>
+            </div>
+            <div class="msg user">
+              <div class="msg-av av-user">👩</div>
+              <div class="msg-bubble">Yes please! Also in Igbo if possible 🙏</div>
+            </div>
+            <div class="msg bot">
+              <div class="msg-av av-bot">📚</div>
+              <div class="msg-bubble">Absolutely! Generating bilingual worksheets in English & Igbo for all 5 days. Downloading now — completely FREE! 🎉<br/><br/>Also connecting you with the <strong>Enugu Homeschool Mums</strong> group — 340 mamas near you! 💚</div>
+            </div>
+          </div>
+          <div class="chat-input">
+            <input type="text" placeholder="Ask EduMama anything... 💬" readonly/>
+            <button class="chat-send">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="sw">
+    <div class="uc-header reveal">
+      <span class="section-badge sb-blue">💡 Real Examples</span>
+      <h2 class="sec-title">Mums Ask. EduMama Answers.</h2>
+      <p class="sec-sub">Here are some of the real ways Nigerian homeschool mums use EduMama every single day.</p>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card uc1 reveal">
+        <div class="uc-icon">🔬</div>
+        <div class="uc-q">Use Case 01</div>
+        <div class="uc-title">"Give me a 1-week science plan using items from my Enugu home"</div>
+        <div class="uc-desc">Get full daily lesson plans for any subject using locally available materials — no expensive lab kits needed. Every plan aligns with the FGN curriculum for your child's grade.</div>
+      </div>
+      <div class="uc-card uc2 reveal">
+        <div class="uc-icon">📖</div>
+        <div class="uc-q">Use Case 02</div>
+        <div class="uc-title">"I need reading materials in Hausa for my 5-year-old"</div>
+        <div class="uc-desc">Access free bilingual reading packs, phonic exercises, and illustrated stories in Hausa, Yoruba, Igbo, and Pidgin — developed by Nigerian educators for Nigerian children.</div>
+      </div>
+      <div class="uc-card uc3 reveal">
+        <div class="uc-icon">✖️</div>
+        <div class="uc-q">Use Case 03</div>
+        <div class="uc-title">"What are fun ways to teach multiplication to 3 children at once?"</div>
+        <div class="uc-desc">Discover multi-child learning strategies, games, and activities that keep kids of different ages engaged at the same time — turning your home into a joyful classroom.</div>
+      </div>
+      <div class="uc-card uc4 reveal">
+        <div class="uc-icon">🤝</div>
+        <div class="uc-q">Use Case 04</div>
+        <div class="uc-title">"Connect me with homeschooling communities in Lagos"</div>
+        <div class="uc-desc">Find active homeschool groups in your state, discover local events and co-ops, and connect with mentors who have walked the same path you're on right now.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM LEVELS -->
+<section id="curriculum">
+  <div class="sw">
+    <div class="curr-header reveal">
+      <span class="section-badge sb-purple">🎓 Curriculum Levels</span>
+      <h2 class="sec-title">Learning for Every Age</h2>
+      <p class="sec-sub">EduMama covers Nursery through Secondary — all aligned with Nigerian FGN standards and enriched with the best of global education.</p>
+    </div>
+    <div class="curr-grid">
+      <div class="curr-card cc-nursery reveal">
+        <div class="curr-level cl-nursery">🌱 Nursery</div>
+        <div class="curr-age">Ages 2 – 5 · Pre-Primary 1 & 2</div>
+        <div class="curr-subjects">
+          <span class="cs">Phonics & Reading</span>
+          <span class="cs">Number Recognition</span>
+          <span class="cs">Creative Arts</span>
+          <span class="cs">Social Skills</span>
+          <span class="cs">Mother Tongue</span>
+          <span class="cs">Rhymes & Songs</span>
+          <span class="cs">Play-Based Learning</span>
+        </div>
+        <a href="#cta" class="curr-cta">Explore Plans →</a>
+      </div>
+      <div class="curr-card cc-primary reveal">
+        <div class="curr-level cl-primary">📗 Primary</div>
+        <div class="curr-age">Ages 6 – 11 · Primary 1 – 6</div>
+        <div class="curr-subjects">
+          <span class="cs">English Language</span>
+          <span class="cs">Mathematics</span>
+          <span class="cs">Basic Science</span>
+          <span class="cs">Social Studies</span>
+          <span class="cs">Civic Education</span>
+          <span class="cs">Agricultural Science</span>
+          <span class="cs">Computer Studies</span>
+          <span class="cs">Cultural & Creative Arts</span>
+        </div>
+        <a href="#cta" class="curr-cta">Explore Plans →</a>
+      </div>
+      <div class="curr-card cc-secondary reveal">
+        <div class="curr-level cl-secondary">📘 Secondary</div>
+        <div class="curr-age">Ages 12 – 17 · JSS1 – SS3</div>
+        <div class="curr-subjects">
+          <span class="cs">English & Literature</span>
+          <span class="cs">Mathematics</span>
+          <span class="cs">Physics</span>
+          <span class="cs">Chemistry</span>
+          <span class="cs">Biology</span>
+          <span class="cs">Geography</span>
+          <span class="cs">Economics</span>
+          <span class="cs">WAEC/NECO Prep</span>
+        </div>
+        <a href="#cta" class="curr-cta">Explore Plans →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="sw">
+    <div class="community-inner">
+      <div>
+        <div class="reveal">
+          <span class="section-badge">💚 Community</span>
+          <h2 class="sec-title" style="color:#fff">You're Not<br/>Alone, Mama</h2>
+          <p class="sec-sub">Join thousands of homeschooling mums across Nigeria who share resources, stories, support, and laughter — every single day.</p>
+        </div>
+        <div class="state-grid">
+          <div class="state-card reveal"><span class="sc-icon">🏙️</span><div><div class="sc-name">Lagos State</div><div class="sc-count">1,240 members</div></div></div>
+          <div class="state-card reveal"><span class="sc-icon">🏛️</span><div><div class="sc-name">Abuja FCT</div><div class="sc-count">890 members</div></div></div>
+          <div class="state-card reveal"><span class="sc-icon">🌿</span><div><div class="sc-name">Rivers State</div><div class="sc-count">620 members</div></div></div>
+          <div class="state-card reveal"><span class="sc-icon">🦅</span><div><div class="sc-name">Kano State</div><div class="sc-count">510 members</div></div></div>
+          <div class="state-card reveal"><span class="sc-icon">🏔️</span><div><div class="sc-name">Enugu State</div><div class="sc-count">480 members</div></div></div>
+          <div class="state-card reveal"><span class="sc-icon">🌺</span><div><div class="sc-name">All 36 States</div><div class="sc-count">15,000+ total</div></div></div>
+        </div>
+      </div>
+      <div class="comm-quotes">
+        <div class="quote-card reveal">
+          <div class="quote-text">"EduMama gave me a complete 3-month curriculum for my daughter in just 10 minutes. The Yoruba resources were exactly what I needed and totally free!"</div>
+          <div class="quote-author">
+            <div class="qa-av" style="background:linear-gradient(135deg,#F472B6,#EC4899)">👩‍🦱</div>
+            <div><div class="qa-name">Adunola F.</div><div class="qa-loc">Ibadan, Oyo State</div></div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <div class="quote-card reveal">
+          <div class="quote-text">"I homeschool three children aged 4, 7, and 11. EduMama's multi-child scheduling tool has been a lifesaver. It keeps all three learning without the chaos!"</div>
+          <div class="quote-author">
+            <div class="qa-av" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8)">👩‍🦳</div>
+            <div><div class="qa-name">Hajiya Hauwa K.</div><div class="qa-loc">Kaduna State</div></div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <div class="quote-card reveal">
+          <div class="quote-text">"The Igbo reading materials my 5-year-old gets from EduMama are better than anything I found at the bookstore. And they're FREE. I can't believe this is real!"</div>
+          <div class="quote-author">
+            <div class="qa-av" style="background:linear-gradient(135deg,#2ECC71,#27AE60)">👩</div>
+            <div><div class="qa-name">Chidinma O.</div><div class="qa-loc">Onitsha, Anambra State</div></div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="sw">
+    <div class="res-header reveal">
+      <span class="section-badge sb-sun">🎁 Free Resources</span>
+      <h2 class="sec-title">Tools & Materials,<br/>Mostly Free!</h2>
+      <p class="sec-sub">Curated free and affordable resources for Nigerian homeschool families — books, apps, DIY experiments, and more.</p>
+    </div>
+    <div class="res-grid">
+      <div class="res-card reveal">
+        <div class="res-emoji">📱</div>
+        <div class="res-title">Learning Apps</div>
+        <div class="res-desc">Top-rated educational apps that work offline for families with limited data</div>
+        <span class="res-free">✓ Free Options</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">🎥</div>
+        <div class="res-title">YouTube Channels</div>
+        <div class="res-desc">Nigerian and African-context educational YouTube channels for every age group</div>
+        <span class="res-free">✓ 100% Free</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">🔬</div>
+        <div class="res-title">DIY Experiments</div>
+        <div class="res-desc">Science experiments using everyday Nigerian household items — no lab needed!</div>
+        <span class="res-free">✓ Free Guides</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">🎨</div>
+        <div class="res-title">Arts & Crafts</div>
+        <div class="res-desc">Creative activities using local materials like raffia, clay, kente, and natural dyes</div>
+        <span class="res-free">✓ Free Printables</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">📚</div>
+        <div class="res-title">Textbooks & Workbooks</div>
+        <div class="res-desc">Recommended affordable Nigerian-published textbooks approved for FGN curricula</div>
+        <span class="res-free">✓ Affordable</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">🗺️</div>
+        <div class="res-title">Local Learning Hubs</div>
+        <div class="res-desc">Libraries, science centres, and educational markets near you in your state</div>
+        <span class="res-free">✓ Location-Based</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">📝</div>
+        <div class="res-title">Printable Worksheets</div>
+        <div class="res-desc">500+ printable worksheets for all subjects, grades, and in multiple Nigerian languages</div>
+        <span class="res-free">✓ Free Download</span>
+      </div>
+      <div class="res-card reveal">
+        <div class="res-emoji">🎵</div>
+        <div class="res-title">Songs & Rhymes</div>
+        <div class="res-desc">Learning songs in English, Hausa, Yoruba, and Igbo for young children (ages 2–8)</div>
+        <span class="res-free">✓ Free Audio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOREIGN LANGUAGES -->
+<section id="foreign-langs">
+  <div class="sw">
+    <div class="fl-header reveal">
+      <span class="section-badge sb-blue">🌍 Foreign Languages</span>
+      <h2 class="sec-title">Raise Globally<br/>Fluent Children!</h2>
+      <p class="sec-sub">Give your children the gift of global communication. EduMama supports six international languages with age-appropriate lesson plans, reading packs, and audio resources — all alongside your Nigerian mother tongue.</p>
+    </div>
+    <div class="fl-big-grid">
+
+      <div class="fl-card fll-french reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇫🇷</span>
+          <div>
+            <div class="fl-lang-name">French</div>
+            <div class="fl-native">Français</div>
+            <span class="fl-pill">300M+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">French is the second most widely spoken language in Africa, spoken in many neighbouring countries including Benin, Niger, Cameroon, and Chad. A vital second language for Nigerian children.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">Nursery – SS3</span>
+            <span class="fl-feat-tag">Audio Lessons</span>
+            <span class="fl-feat-tag">Printable Packs</span>
+            <span class="fl-feat-tag">WAEC French Prep</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Primary 1</div>
+            <div class="fl-sample-text">Bonjour! Comment tu t'appelles?</div>
+            <div class="fl-sample-trans">"Hello! What is your name?" — a great first lesson for ages 6–7</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-card fll-arabic reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇸🇦</span>
+          <div>
+            <div class="fl-lang-name">Arabic</div>
+            <div class="fl-native">العربية</div>
+            <span class="fl-pill">420M+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">Arabic is widely spoken and studied in Northern Nigeria, and is the language of Islamic religious studies across the Muslim community. Essential for many Nigerian families.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">Arabic Script</span>
+            <span class="fl-feat-tag">Quranic Arabic</span>
+            <span class="fl-feat-tag">Modern Standard</span>
+            <span class="fl-feat-tag">Islamic Studies</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Nursery</div>
+            <div class="fl-sample-text">مرحباً! اسمي أميرة</div>
+            <div class="fl-sample-trans">"Hello! My name is Amira" — introduces Arabic script early</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-card fll-mandarin reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇨🇳</span>
+          <div>
+            <div class="fl-lang-name">Mandarin</div>
+            <div class="fl-native">普通话</div>
+            <span class="fl-pill">1B+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">Mandarin Chinese is the world's most spoken language by native speakers. With growing Chinese business presence in Nigeria, Mandarin opens enormous career and trade opportunities.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">Pinyin System</span>
+            <span class="fl-feat-tag">Basic Characters</span>
+            <span class="fl-feat-tag">Business Chinese</span>
+            <span class="fl-feat-tag">Audio Tones</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Primary 2</div>
+            <div class="fl-sample-text">你好！我叫 Chukwuemeka</div>
+            <div class="fl-sample-trans">"Hello! My name is Chukwuemeka" — mixing cultures!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-card fll-spanish reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇪🇸</span>
+          <div>
+            <div class="fl-lang-name">Spanish</div>
+            <div class="fl-native">Español</div>
+            <span class="fl-pill">500M+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">Spanish is the second most spoken language in the world by native speakers. It is relatively easy to learn for English speakers and opens doors across Latin America, Europe, and the USA.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">Beginner – Advanced</span>
+            <span class="fl-feat-tag">Songs & Rhymes</span>
+            <span class="fl-feat-tag">Story Books</span>
+            <span class="fl-feat-tag">Grammar Packs</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Primary 1</div>
+            <div class="fl-sample-text">¡Hola! Me llamo Taiwo.</div>
+            <div class="fl-sample-trans">"Hello! My name is Taiwo." — fun and instantly recognisable</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-card fll-german reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇩🇪</span>
+          <div>
+            <div class="fl-lang-name">German</div>
+            <div class="fl-native">Deutsch</div>
+            <span class="fl-pill">100M+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">Germany is one of the strongest economies in the world and a top destination for Nigerian students pursuing higher education. Learning German early gives your child a major head start.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">University Prep</span>
+            <span class="fl-feat-tag">Goethe Aligned</span>
+            <span class="fl-feat-tag">Vocabulary Packs</span>
+            <span class="fl-feat-tag">Pronunciation Guide</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Primary 3</div>
+            <div class="fl-sample-text">Guten Tag! Ich heiße Adaeze.</div>
+            <div class="fl-sample-trans">"Good day! My name is Adaeze." — confident and clear</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-card fll-portuguese reveal">
+        <div class="fl-card-top">
+          <span class="fl-flag">🇧🇷</span>
+          <div>
+            <div class="fl-lang-name">Portuguese</div>
+            <div class="fl-native">Português</div>
+            <span class="fl-pill">260M+ Speakers</span>
+          </div>
+        </div>
+        <div class="fl-card-body">
+          <p class="fl-desc">Portuguese connects Nigeria to Brazil (a major trading partner) and neighbouring African countries like Angola, Mozambique, and São Tomé. A valuable language for Nigerian business and culture.</p>
+          <div class="fl-features">
+            <span class="fl-feat-tag">African Portuguese</span>
+            <span class="fl-feat-tag">Trade & Business</span>
+            <span class="fl-feat-tag">Story Packs</span>
+            <span class="fl-feat-tag">Beginner Friendly</span>
+          </div>
+          <div class="fl-sample">
+            <div class="fl-sample-label">Sample Phrase — Nursery 2</div>
+            <div class="fl-sample-text">Olá! Meu nome é Bola.</div>
+            <div class="fl-sample-trans">"Hello! My name is Bola." — so easy for young learners!</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ALL LANGUAGES STRIP -->
+<div class="all-langs-strip">
+  <span class="als-chip native">🇬🇧 English</span>
+  <span class="als-chip native">🟢 Hausa</span>
+  <span class="als-chip native">🔵 Yoruba</span>
+  <span class="als-chip native">🔴 Igbo</span>
+  <span class="als-chip native">🟠 Pidgin</span>
+  <span style="color:rgba(255,255,255,.2);padding:0 .5rem;">|</span>
+  <span class="als-chip foreign">🇫🇷 French</span>
+  <span class="als-chip foreign">🇸🇦 Arabic</span>
+  <span class="als-chip foreign">🇨🇳 Mandarin</span>
+  <span class="als-chip foreign">🇪🇸 Spanish</span>
+  <span class="als-chip foreign">🇩🇪 German</span>
+  <span class="als-chip foreign">🇧🇷 Portuguese</span>
+</div>
+
+
+<!-- FIND A MAMA NEAR YOU -->
+<section id="find-mama">
+  <div class="sw">
+    <div class="fm-header reveal">
+      <span class="section-badge sb-pink">💞 Find a Mama Near You</span>
+      <h2 class="sec-title">You're Never<br/>Far from a Friend!</h2>
+      <p class="sec-sub">Search for homeschooling mums in your city or state. Connect directly, share resources, plan playdates, and build your local support network — one mama at a time.</p>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="fm-search-bar reveal">
+      <input type="text" id="fm-name-input" placeholder="🔍  Search by name or keyword..." oninput="filterMamas()"/>
+      <select id="fm-state-select" onchange="filterMamas()">
+        <option value="">📍 All States</option>
+        <option>Lagos</option><option>Abuja FCT</option><option>Rivers</option>
+        <option>Kano</option><option>Enugu</option><option>Oyo</option>
+        <option>Kaduna</option><option>Delta</option><option>Anambra</option>
+        <option>Ondo</option><option>Cross River</option><option>Osun</option>
+      </select>
+      <select id="fm-lang-select" onchange="filterMamas()">
+        <option value="">🗣️ Any Language</option>
+        <option>English</option><option>Yoruba</option><option>Hausa</option>
+        <option>Igbo</option><option>French</option><option>Arabic</option>
+        <option>Mandarin</option><option>Spanish</option>
+      </select>
+      <select id="fm-level-select" onchange="filterMamas()">
+        <option value="">🎓 All Levels</option>
+        <option>Nursery</option><option>Primary</option><option>Secondary</option>
+      </select>
+      <button class="fm-search-btn" onclick="filterMamas()">🔎 Search</button>
+    </div>
+
+    <!-- MAMA CARDS GRID -->
+    <div class="fm-results-grid" id="fm-grid">
+
+      <div class="mama-card reveal" data-state="Lagos" data-lang="English,Yoruba" data-level="Primary">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#F472B6,#EC4899)">👩‍🦱</div>
+          <div>
+            <div class="mama-name">Adunola Fashola</div>
+            <div class="mama-location">📍 Ikeja, Lagos State</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Primary 1–4</span>
+            <span class="mama-tag">English</span>
+            <span class="mama-tag">Yoruba</span>
+            <span class="mama-tag">French</span>
+          </div>
+          <p class="mama-bio">Homeschooling mum of 2 for 4 years. Love using creative arts and storytelling. Happy to share curriculum resources and lesson plan templates!</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">4</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">2</div><div class="ms-label">Children</div></div>
+            <div class="ms-item"><div class="ms-num">38</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('adunola')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348012345678" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mama-card reveal" data-state="Abuja FCT" data-lang="English,French" data-level="Nursery,Primary">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8)">👩</div>
+          <div>
+            <div class="mama-name">Ngozi Okonkwo</div>
+            <div class="mama-location">📍 Garki, Abuja FCT</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Nursery–Primary 3</span>
+            <span class="mama-tag">English</span>
+            <span class="mama-tag">Igbo</span>
+            <span class="mama-tag">French</span>
+          </div>
+          <p class="mama-bio">Former teacher turned full-time homeschool mama. I specialise in early childhood learning and language-based instruction. Weekly virtual meetups welcome!</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">6</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">3</div><div class="ms-label">Children</div></div>
+            <div class="ms-item"><div class="ms-num">62</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('ngozi')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348023456789" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mama-card reveal" data-state="Kano" data-lang="Hausa,English,Arabic" data-level="Primary,Secondary">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#2ECC71,#27AE60)">👩‍🦳</div>
+          <div>
+            <div class="mama-name">Hajiya Hauwa Kabir</div>
+            <div class="mama-location">📍 Nassarawa, Kano State</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Primary–JSS3</span>
+            <span class="mama-tag">Hausa</span>
+            <span class="mama-tag">Arabic</span>
+            <span class="mama-tag">Islamic Studies</span>
+          </div>
+          <p class="mama-bio">Homeschooling 4 children with emphasis on Islamic values, Hausa language, and Arabic. Advocate for Northern Nigerian homeschool rights. Happy to mentor new mamas!</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">8</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">4</div><div class="ms-label">Children</div></div>
+            <div class="ms-item"><div class="ms-num">91</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('hauwa')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348034567890" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mama-card reveal" data-state="Enugu" data-lang="English,Igbo" data-level="Nursery,Primary">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#FFB800,#FF8C00)">👩‍🦰</div>
+          <div>
+            <div class="mama-name">Chidinma Okafor</div>
+            <div class="mama-location">📍 Enugu North, Enugu State</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Nursery–Primary 5</span>
+            <span class="mama-tag">English</span>
+            <span class="mama-tag">Igbo</span>
+            <span class="mama-tag">Spanish</span>
+          </div>
+          <p class="mama-bio">Science & nature enthusiast! I create DIY experiments from household items for my two kids. Love sharing Igbo cultural stories as part of our curriculum. DM me!</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">3</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">2</div><div class="ms-label">Children</div></div>
+            <div class="ms-item"><div class="ms-num">44</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('chidinma')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348045678901" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mama-card reveal" data-state="Rivers" data-lang="English" data-level="Primary,Secondary">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">👩‍💼</div>
+          <div>
+            <div class="mama-name">Blessing Ekwueme</div>
+            <div class="mama-location">📍 Port Harcourt, Rivers State</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Primary 4–SS2</span>
+            <span class="mama-tag">English</span>
+            <span class="mama-tag">STEM Focus</span>
+            <span class="mama-tag">Mandarin</span>
+          </div>
+          <p class="mama-bio">STEM advocate and former oil & gas professional. Now homeschooling my 3 children with a focus on maths, science, and Mandarin Chinese. Monthly PH meetup host!</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">5</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">3</div><div class="ms-label">Children</div></div>
+            <div class="ms-item"><div class="ms-num">77</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('blessing')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348056789012" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mama-card reveal" data-state="Oyo" data-lang="Yoruba,English" data-level="Nursery">
+        <div class="mama-card-top">
+          <div class="mama-avatar" style="background:linear-gradient(135deg,#EF4444,#B91C1C)">👩‍🍳</div>
+          <div>
+            <div class="mama-name">Temitope Adesanya</div>
+            <div class="mama-location">📍 Ibadan, Oyo State</div>
+            <span class="mama-verified">✓ Verified Member</span>
+          </div>
+        </div>
+        <div class="mama-card-body">
+          <div class="mama-tags">
+            <span class="mama-tag">Nursery–Primary 2</span>
+            <span class="mama-tag">Yoruba</span>
+            <span class="mama-tag">English</span>
+            <span class="mama-tag">Music & Arts</span>
+          </div>
+          <p class="mama-bio">Passionate about early childhood and Yoruba language preservation. I organise weekly homeschool co-op sessions in Ibadan. Come join us — snacks included! 😄</p>
+          <div class="mama-stats">
+            <div class="ms-item"><div class="ms-num">2</div><div class="ms-label">Yrs Homeschooling</div></div>
+            <div class="ms-item"><div class="ms-num">1</div><div class="ms-label">Child</div></div>
+            <div class="ms-item"><div class="ms-num">29</div><div class="ms-label">Resources Shared</div></div>
+          </div>
+          <div class="mama-actions">
+            <button class="ma-btn ma-primary" onclick="openModal('temitope')">👋 View Profile</button>
+            <a class="ma-btn ma-wa" href="https://wa.me/2348067890123" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p id="fm-no-results" style="display:none;text-align:center;padding:2rem;color:var(--muted);font-size:1rem;font-weight:600;">
+      😔 No mamas found matching your search. Try adjusting the filters, or <a href="#find-mama" style="color:var(--pink2);">register below</a> to be listed!
+    </p>
+
+    <!-- REGISTER TO BE LISTED -->
+    <div class="fm-register reveal">
+      <h3>📝 Are You a Homeschooling Mama?</h3>
+      <p>Join our directory and let other mamas in your city or state find you! Share your experience, connect locally, and grow together. It's completely free to list yourself.</p>
+      <div class="fm-form">
+        <input type="text" placeholder="Your Full Name" id="reg-name"/>
+        <input type="text" placeholder="City & State (e.g. Ibadan, Oyo)" id="reg-location"/>
+        <input type="tel" placeholder="WhatsApp Number" id="reg-phone"/>
+        <select id="reg-state">
+          <option value="">Select State</option>
+          <option>Lagos</option><option>Abuja FCT</option><option>Rivers</option>
+          <option>Kano</option><option>Enugu</option><option>Oyo</option>
+          <option>Kaduna</option><option>Delta</option><option>Anambra</option>
+          <option>Ondo</option><option>Edo</option><option>Osun</option>
+          <option>Cross River</option><option>Borno</option><option>Sokoto</option>
+        </select>
+        <button class="fm-form-btn" onclick="registerMama()">🙋‍♀️ List Me!</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAMA PROFILE MODALS -->
+<div class="mama-modal-overlay" id="modal-adunola" onclick="closeModal(event,'modal-adunola')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-adunola').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#F472B6,#EC4899)">👩‍🦱</div>
+    <div class="modal-name">Adunola Fashola</div>
+    <div class="modal-loc">📍 Ikeja, Lagos State · Homeschooling since 2021</div>
+    <div class="mama-tags"><span class="mama-tag">Primary 1–4</span><span class="mama-tag">English</span><span class="mama-tag">Yoruba</span><span class="mama-tag">French</span><span class="mama-tag">Creative Arts</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">Homeschooling mum of 2 for 4 years. Love using creative arts, storytelling, and music to make learning fun. I run a small homeschool co-op with 6 other families in Ikeja every Saturday. Always happy to share curriculum templates and lesson ideas!</p>
+    <div class="modal-section-title">📞 Contact Adunola</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348012345678" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 801 234 5678</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:adunola@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">adunola@example.com</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="#"><span class="mcr-icon">📸</span><div><div class="mcr-label">Instagram</div><div class="mcr-val">@adunola_homeschools</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+    <div class="modal-section-title">📍 Location</div>
+    <p style="font-size:.85rem;color:var(--muted);">Ikeja, Lagos State, Nigeria · Available for in-person meetups and virtual calls.</p>
+  </div>
+</div>
+
+<div class="mama-modal-overlay" id="modal-ngozi" onclick="closeModal(event,'modal-ngozi')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-ngozi').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8)">👩</div>
+    <div class="modal-name">Ngozi Okonkwo</div>
+    <div class="modal-loc">📍 Garki, Abuja FCT · Homeschooling since 2019</div>
+    <div class="mama-tags"><span class="mama-tag">Nursery–Primary 3</span><span class="mama-tag">English</span><span class="mama-tag">Igbo</span><span class="mama-tag">French</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">Former primary school teacher with 10 years experience who transitioned to full-time homeschooling. I specialise in early literacy and numeracy. I host weekly virtual meetups for Abuja-based homeschool mums every Tuesday evening.</p>
+    <div class="modal-section-title">📞 Contact Ngozi</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348023456789" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 802 345 6789</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:ngozi@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">ngozi@example.com</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="#"><span class="mcr-icon">👥</span><div><div class="mcr-label">Facebook Group</div><div class="mcr-val">Abuja Homeschool Mamas</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="mama-modal-overlay" id="modal-hauwa" onclick="closeModal(event,'modal-hauwa')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-hauwa').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#2ECC71,#27AE60)">👩‍🦳</div>
+    <div class="modal-name">Hajiya Hauwa Kabir</div>
+    <div class="modal-loc">📍 Nassarawa, Kano State · Homeschooling since 2017</div>
+    <div class="mama-tags"><span class="mama-tag">Primary–JSS3</span><span class="mama-tag">Hausa</span><span class="mama-tag">Arabic</span><span class="mama-tag">Islamic Studies</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">One of Northern Nigeria's most experienced homeschool mamas with 4 children. Passionate about Islamic education, Hausa language preservation, and Arabic literacy. Available to mentor new mamas in Kano and surrounding states.</p>
+    <div class="modal-section-title">📞 Contact Hauwa</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348034567890" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 803 456 7890</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:hauwa@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">hauwa@example.com</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="mama-modal-overlay" id="modal-chidinma" onclick="closeModal(event,'modal-chidinma')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-chidinma').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#FFB800,#FF8C00)">👩‍🦰</div>
+    <div class="modal-name">Chidinma Okafor</div>
+    <div class="modal-loc">📍 Enugu North, Enugu State · Homeschooling since 2022</div>
+    <div class="mama-tags"><span class="mama-tag">Nursery–Primary 5</span><span class="mama-tag">English</span><span class="mama-tag">Igbo</span><span class="mama-tag">Spanish</span><span class="mama-tag">STEM</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">Nature-loving homeschool mama who creates hands-on science experiments from things found around the house. Big believer in teaching through stories and Igbo proverbs. Learning Spanish alongside my kids!</p>
+    <div class="modal-section-title">📞 Contact Chidinma</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348045678901" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 804 567 8901</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:chidinma@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">chidinma@example.com</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="#"><span class="mcr-icon">📸</span><div><div class="mcr-label">Instagram</div><div class="mcr-val">@chidinma_teaches</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="mama-modal-overlay" id="modal-blessing" onclick="closeModal(event,'modal-blessing')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-blessing').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">👩‍💼</div>
+    <div class="modal-name">Blessing Ekwueme</div>
+    <div class="modal-loc">📍 Port Harcourt, Rivers State · Homeschooling since 2020</div>
+    <div class="mama-tags"><span class="mama-tag">Primary 4–SS2</span><span class="mama-tag">English</span><span class="mama-tag">STEM</span><span class="mama-tag">Mandarin</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">Former petroleum engineer who chose homeschooling after seeing the impact of personalised learning. STEM is our passion. I host monthly homeschool meetups in Port Harcourt and run a Mandarin Chinese study group for kids.</p>
+    <div class="modal-section-title">📞 Contact Blessing</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348056789012" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 805 678 9012</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:blessing@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">blessing@example.com</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="#"><span class="mcr-icon">👥</span><div><div class="mcr-label">Facebook Group</div><div class="mcr-val">PH STEM Homeschool Mamas</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="mama-modal-overlay" id="modal-temitope" onclick="closeModal(event,'modal-temitope')">
+  <div class="mama-modal">
+    <button class="modal-close" onclick="document.getElementById('modal-temitope').classList.remove('open')">✕</button>
+    <div class="modal-avatar" style="background:linear-gradient(135deg,#EF4444,#B91C1C)">👩‍🍳</div>
+    <div class="modal-name">Temitope Adesanya</div>
+    <div class="modal-loc">📍 Ibadan, Oyo State · Homeschooling since 2023</div>
+    <div class="mama-tags"><span class="mama-tag">Nursery–Primary 2</span><span class="mama-tag">Yoruba</span><span class="mama-tag">English</span><span class="mama-tag">Music</span><span class="mama-tag">Arts</span></div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.65;margin:.8rem 0;">Brand new to homeschooling but SO passionate about it! A music graduate who uses songs, rhythm, and art to teach everything. I run a weekly co-op group in Ibadan on Wednesdays — all new mamas are welcome!</p>
+    <div class="modal-section-title">📞 Contact Temitope</div>
+    <div class="modal-contacts">
+      <a class="modal-contact-row" href="https://wa.me/2348067890123" target="_blank"><span class="mcr-icon">💬</span><div><div class="mcr-label">WhatsApp</div><div class="mcr-val">+234 806 789 0123</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="mailto:temitope@example.com"><span class="mcr-icon">✉️</span><div><div class="mcr-label">Email</div><div class="mcr-val">temitope@example.com</div></div><span class="mcr-arr">↗</span></a>
+      <a class="modal-contact-row" href="#"><span class="mcr-icon">📸</span><div><div class="mcr-label">Instagram</div><div class="mcr-val">@tope_homeschool_music</div></div><span class="mcr-arr">↗</span></a>
+    </div>
+  </div>
+</div>
+
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner reveal">
+    <div class="cta-emojis">📚 🇳🇬 💚 👩‍👧‍👦</div>
+    <h2 class="cta-title">Start Your<br/>EduMama Journey Today!</h2>
+    <p class="cta-sub">Join over 15,000 Nigerian homeschooling mums who are teaching confidently, raising brilliantly, and building their children's futures — one lesson at a time.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-white">🚀 Get Started — It's Free!</a>
+      <a href="#demo" class="btn-ghost-w">💬 Try AI Assistant</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="fb-name">EduMama <em>Nigeria</em> 📚</div>
+      <p class="fb-desc">Your supportive, practical, and culturally aware companion for homeschooling in Nigeria. Built by mamas, for mamas. 💚</p>
+      <div class="fb-langs">
+        <span class="fb-lang">English</span>
+        <span class="fb-lang">Hausa</span>
+        <span class="fb-lang">Yoruba</span>
+        <span class="fb-lang">Igbo</span>
+        <span class="fb-lang">Pidgin</span>
+        <span class="fb-lang">Français</span>
+        <span class="fb-lang">Arabic</span>
+        <span class="fb-lang">Mandarin</span>
+        <span class="fb-lang">Español</span>
+        <span class="fb-lang">Deutsch</span>
+        <span class="fb-lang">Português</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Features</h4>
+      <ul>
+        <li><a href="#">Curriculum Planner</a></li>
+        <li><a href="#">AI Assistant</a></li>
+        <li><a href="#">Progress Tracker</a></li>
+        <li><a href="#">Scheduling Tools</a></li>
+        <li><a href="#">Quiz Generator</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Free Worksheets</a></li>
+        <li><a href="#">Language Materials</a></li>
+        <li><a href="#">DIY Experiments</a></li>
+        <li><a href="#">App Directory</a></li>
+        <li><a href="#">Lesson Templates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <ul>
+        <li><a href="#find-mama">Find a Mama Near You</a></li>
+        <li><a href="#">Find Your State Group</a></li>
+        <li><a href="#">Success Stories</a></li>
+        <li><a href="#">Events & Meetups</a></li>
+        <li><a href="#">Mentorship</a></li>
+        <li><a href="#">Contact Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="fb-copy">© 2025 EduMama Nigeria. Made with <span class="fb-heart">♥</span> for Nigerian homeschool mamas. 🇳🇬</div>
+    <div class="footer-socials">
+      <a href="#" class="fs-icon" title="WhatsApp">💬</a>
+      <a href="#" class="fs-icon" title="Instagram">📸</a>
+      <a href="#" class="fs-icon" title="Facebook">👥</a>
+      <a href="#" class="fs-icon" title="YouTube">🎥</a>
+      <a href="#" class="fs-icon" title="Twitter/X">🐦</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // NAV ACTIVE STATE
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    document.querySelectorAll('section[id]').forEach(s => {
+      if (window.scrollY >= s.offsetTop - 130) cur = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--ink)' : '';
+    });
+    const nav = document.querySelector('nav');
+    nav.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(26,26,46,0.1)' : 'none';
+  });
+
+  // CHAT SEND BUTTON interaction
+  document.querySelector('.chat-send').addEventListener('click', function() {
+    const input = document.querySelector('.chat-input input');
+    if (input.value.trim()) { input.value = ''; }
+    this.style.transform = 'scale(0.9)';
+    setTimeout(() => this.style.transform = '', 200);
+  });
+
+  // Floating cards subtle entrance stagger
+  document.querySelectorAll('.float-card').forEach((card, i) => {
+    card.style.animationDelay = (1.1 + i * 0.15) + 's';
+  });
+
+  // ── FIND A MAMA: filter function ──────────────────────────────────────────
+  function filterMamas() {
+    const nameQ  = (document.getElementById('fm-name-input').value  || '').toLowerCase();
+    const stateQ = (document.getElementById('fm-state-select').value || '').toLowerCase();
+    const langQ  = (document.getElementById('fm-lang-select').value  || '').toLowerCase();
+    const levelQ = (document.getElementById('fm-level-select').value || '').toLowerCase();
+
+    const cards = document.querySelectorAll('#fm-grid .mama-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const state = (card.dataset.state  || '').toLowerCase();
+      const lang  = (card.dataset.lang   || '').toLowerCase();
+      const level = (card.dataset.level  || '').toLowerCase();
+      const text  = card.innerText.toLowerCase();
+
+      const matchName  = !nameQ  || text.includes(nameQ);
+      const matchState = !stateQ || state.includes(stateQ);
+      const matchLang  = !langQ  || lang.includes(langQ);
+      const matchLevel = !levelQ || level.includes(levelQ);
+
+      if (matchName && matchState && matchLang && matchLevel) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    document.getElementById('fm-no-results').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // ── MAMA MODALS ───────────────────────────────────────────────────────────
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(e, id) {
+    if (e.target === document.getElementById(id)) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+  // close on ESC key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.mama-modal-overlay.open').forEach(m => {
+        m.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+
+  // ── REGISTER MAMA ─────────────────────────────────────────────────────────
+  function registerMama() {
+    const name  = document.getElementById('reg-name').value.trim();
+    const loc   = document.getElementById('reg-location').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const state = document.getElementById('reg-state').value;
+
+    if (!name || !loc || !phone || !state) {
+      alert('Please fill in all fields to be listed! 😊');
+      return;
+    }
+    // In production this would POST to a backend/Firebase.
+    // For now show a friendly confirmation.
+    alert('🎉 Thank you, ' + name + '!\n\nYour request has been submitted. Once verified, your profile will appear in the directory within 24 hours.\n\nWelcome to the EduMama community! 💚');
+    ['reg-name','reg-location','reg-phone'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('reg-state').value = '';
+  }
+</script>
+</body>
+</html>
